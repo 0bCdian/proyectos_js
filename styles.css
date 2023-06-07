@@ -1,0 +1,47 @@
+* {
+  font-family: 'system-ui';
+  background-color: #d4be98;
+}
+#container {
+  margin-top: -4rem;
+  padding: 0;
+}
+h1 {
+  font-size: 5rem;
+  color: #323232;
+}
+section {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+p {
+  font-size: 5rem;
+  color: #323232;
+}
+button {
+  border-radius: 10px;
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+  padding: 1rem;
+  border: 3px solid #323232;
+}
+.decrease {
+  background-color: #d35f58;
+}
+.increase {
+  background-color: #709d93;
+}
+.reset {
+  background-color: #c2954e;
+}
+#createCounter {
+  border-radius: 20px;
+  font-size: 2rem;
+  background-color: #98a45b;
+  color: #323232;
+  border: 5px solid #323232;
+  margin-top: 2rem;
+}
