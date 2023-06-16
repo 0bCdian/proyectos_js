@@ -18,8 +18,12 @@ h1 {
   font-size: 6rem;
   margin: 1rem auto;
   padding: 0;
-  min-height: 5rem;
 }
+
+.hidden {
+  opacity: 0;
+}
+
 #container_tres_en_raya {
   display: grid;
   grid-template-columns: repeat(3, 10rem);

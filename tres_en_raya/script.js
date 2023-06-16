@@ -1,15 +1,22 @@
 // Globals
-let gameState = {
+const gameState = {
   gameBoard: [
     ['', '', ''],
     ['', '', ''],
     ['', '', ''],
   ],
   currentPlayer: 'x',
-  scoreBoard: { x: 0, y: 0 },
+  scoreBoard: { x: 0, o: 0 },
 }
 
 // helpers
+
+/**
+ *[checkWinner description]
+ * receives current player string parameter, and iterates over the gameState.gameboard matrix checking if the current player repeats three times in a winning pattern (vertical, horizontal or both diagonals), returns true if any winning match is found, false otherwise
+ * @param {string} currentPlayer
+ * @returns {boolean}
+ */
 function checkWinner(currentPlayer) {
   let diagonalMatch = 0
   let verticalMatch = 0
@@ -51,33 +58,88 @@ function checkWinner(currentPlayer) {
   return false
 }
 
+/**
+ * [handleWinner description]
+ *
+ * @param {string} winner
+ * changes the h1 to display the current winner, resets the board updates the gameState.gameBoard scores and restarts the game
+ */
 function handleWinner(winner) {
-  document.querySelector('h1').innerHTML = `Ganador es ${winner}`
-  setTimeout(5000, () => {
-    document.querySelector('h1').innerHTML = ''
-  })
+  const winnerPrompt = document.querySelector('h1')
+  winnerPrompt.innerHTML = `Ganador: ${winner}`
+  winnerPrompt.removeAttribute('class')
+  resetBoard()
+  setTimeout(() => {
+    winnerPrompt.className = 'hidden'
+    gameState.scoreBoard[winner]++
+    gameState.currentPlayer = winner
+    initGame()
+  }, 2000)
+}
+
+/**
+ * [setScores description]
+ *
+ * retrieves spans with scores and updates their value to the gameState.scoreBoard corresponding values
+ *
+ * @return {void}
+ */
+function setScores() {
+  const scoreX = document.getElementById('x')
+  const scoreY = document.getElementById('y')
+  scoreX.innerHTML = gameState.scoreBoard.x
+  scoreY.innerHTML = gameState.scoreBoard.o
+}
+
+/**
+ * [resetBoard description]
+ *
+ * Cleans the gameState.gameBoard matrix with empty strings, removes all remaining event listeners from the div cells,and sets them to empty strings
+ */
+function resetBoard() {
   gameState.gameBoard = [
     ['', '', ''],
     ['', '', ''],
     ['', '', ''],
   ]
-  gameState.scoreBoard.winner++
-  document.getElementById(winner).innerHTML = ' ' + gameState.scoreBoard[winner]
-}
-
-function initGame() {
   const $divsArray = document.querySelectorAll('div')
   $divsArray.forEach(($div) => {
-    $div.addEventListener('click', function clickHandler() {
-      const [xCordinate, yCoordinate] = $div.getAttribute('cell').split(',')
-      gameState.gameBoard[xCordinate][yCoordinate] = gameState.currentPlayer
-      $div.innerHTML = gameState.currentPlayer
-      $div.removeEventListener('click', clickHandler)
-      if (checkWinner(gameState.currentPlayer)) {
-        handleWinner(gameState.currentPlayer)
-      }
-      gameState.currentPlayer = gameState.currentPlayer === 'x' ? 'o' : 'x'
-    })
+    $div.removeEventListener('click', clickHandler)
+    $div.innerHTML = ''
+  })
+}
+
+/**
+ *
+ * @param {divElement} target
+ *
+ * [clickHandler description]
+ *
+ * retrieves the cell attribute from the div passed as argument and updates the gameState.gameboard corresponding cell with the gameState.currentPlayer value, also changes the div innerHTML with the gameSate.currentPlayer value, removes this event handler from the div, and checks if the current player won, else changes the currentPlayer to the next
+ *
+ */
+function clickHandler({ target }) {
+  const [xCordinate, yCoordinate] = target.getAttribute('cell').split(',')
+  gameState.gameBoard[xCordinate][yCoordinate] = gameState.currentPlayer
+  target.innerHTML = gameState.currentPlayer
+  target.removeEventListener('click', clickHandler)
+  if (checkWinner(gameState.currentPlayer)) {
+    handleWinner(gameState.currentPlayer)
+  } else {
+    gameState.currentPlayer = gameState.currentPlayer === 'x' ? 'o' : 'x'
+  }
+}
+
+/**
+ * [initGame description]
+ *
+ * initializes the game, setting the scores, and an event listener to all the div cells.
+ */
+function initGame() {
+  setScores()
+  const $divsArray = document.querySelectorAll('div')
+  $divsArray.forEach(($div) => {
+    $div.addEventListener('click', clickHandler)
   })
 }
 
