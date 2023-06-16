@@ -49,13 +49,7 @@ function checkWinner(currentPlayer) {
       horizontalMatch = 0
     }
   }
-  if (diagonalMatch === 3) {
-    return true
-  }
-  if (reverseDiagonalMatch === 3) {
-    return true
-  }
-  return false
+  return diagonalMatch === 3 || reverseDiagonalMatch === 3
 }
 
 /**
@@ -125,6 +119,7 @@ function clickHandler({ target }) {
   target.removeEventListener('click', clickHandler)
   if (checkWinner(gameState.currentPlayer)) {
     handleWinner(gameState.currentPlayer)
+    return
   } else {
     gameState.currentPlayer = gameState.currentPlayer === 'x' ? 'o' : 'x'
   }
